@@ -19,7 +19,7 @@ var users = map[string]string{
 
 func main() {
 	http.HandleFunc("/", loginHandler)
-	http.HandleFunc("/dashboard", dashboardHandler)
+	http.HandleFunc("/home", homeHandler)
 	http.HandleFunc("/logout", logoutHandler)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("templates"))))
@@ -40,7 +40,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			session, _ := store.Get(r, "session")
 			session.Values["username"] = username
 			session.Save(r, w)
-			http.Redirect(w, r, "/dashboard", http.StatusFound)
+			http.Redirect(w, r, "/home", http.StatusFound)
 		} else {
 			renderTemplate(w, "login.html", "Invalid username or password")
 		}
@@ -49,7 +49,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func dashboardHandler(w http.ResponseWriter, r *http.Request) {
+func homeHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
 	username, ok := session.Values["username"].(string)
 	if !ok || username == "" {
@@ -57,7 +57,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	renderTemplate(w, "dashboard.html", username)
+	renderTemplate(w, "index.html", username)
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
