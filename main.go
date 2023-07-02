@@ -38,6 +38,9 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
+		fmt.Println("Username:", username)
+		fmt.Println("Password:", password)
+
 		if pass, ok := users[username]; ok && pass == password {
 			session, _ := store.Get(r, "session")
 			session.Values["username"] = username
