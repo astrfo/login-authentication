@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン</title>
+    <title>新規登録</title>
     <link rel="stylesheet" href="/static/styles.css">
-    <script src="/static/login-validation.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>ログイン</h1>
-        <form action="/" method="post" onsubmit="return loginValidateForm()">
+        <h1>新規登録</h1>
+        <form action="/signup" method="post">
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
@@ -20,8 +19,7 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <div class="button-container">
-                <button type="submit" class="button" onclick="return loginValidateForm()">Login</button>
-                <button type="button" class="button" onclick="location.href='/signup'">Sign Up</button>
+                <button type="submit" class="button">Sign Up</button>
             </div>
         </form>
     </div>

@@ -21,6 +21,7 @@ func main() {
 	http.HandleFunc("/", loginHandler)
 	http.HandleFunc("/home", homeHandler)
 	http.HandleFunc("/logout", logoutHandler)
+	http.HandleFunc("/signup", signupHandler)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("templates"))))
 
@@ -65,6 +66,21 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	session.Values["username"] = ""
 	session.Save(r, w)
 	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func signupHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+
+		fmt.Println("New user registration:")
+		fmt.Println("Username:", username)
+		fmt.Println("Password:", password)
+
+		http.Redirect(w, r, "/", http.StatusFound)
+	} else {
+		renderTemplate(w, "signup.html", nil)
+	}
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
