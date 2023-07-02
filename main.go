@@ -18,10 +18,11 @@ var users = map[string]string{
 }
 
 func main() {
-	http.HandleFunc("/", loginHandler)
+	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/home", homeHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.HandleFunc("/signup", signupHandler)
+	http.HandleFunc("/", redirectHandler)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("templates"))))
 
@@ -54,7 +55,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
 	username, ok := session.Values["username"].(string)
 	if !ok || username == "" {
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
 
@@ -65,7 +66,7 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
 	session.Values["username"] = ""
 	session.Save(r, w)
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
 func signupHandler(w http.ResponseWriter, r *http.Request) {
@@ -77,10 +78,14 @@ func signupHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Username:", username)
 		fmt.Println("Password:", password)
 
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
 		renderTemplate(w, "signup.html", nil)
 	}
+}
+
+func redirectHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
