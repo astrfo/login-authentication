@@ -18,12 +18,13 @@ var users = map[string]string{
 }
 
 func main() {
-	fmt.Println("AccessURL: http://localhost:8080/")
 	http.HandleFunc("/", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/logout", logoutHandler)
 
-	log.Println("Server started on localhost:8080")
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("templates"))))
+
+	log.Println("Server started on http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
